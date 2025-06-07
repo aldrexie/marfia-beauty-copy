@@ -1,0 +1,52 @@
+.announcement-bar {
+  overflow: hidden;
+  position: relative;
+}
+
+.announcement-bar__message {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  opacity: 0;
+  width: max-content;
+}
+
+.announcement-bar__message.active {
+  animation: slideInCenter var(--slide-duration, 5s) forwards;
+}
+
+.announcement-bar__message.exit {
+  animation: slideOutLeft var(--slide-duration, 5s) forwards;
+}
+
+@keyframes slideInCenter {
+  0% {
+    left: 100%;
+    transform: translateX(0);
+    opacity: 0;
+  }
+  20%, 80% {
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 1;
+  }
+  100% {
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutLeft {
+  0% {
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 1;
+  }
+  100% {
+    left: 0;
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+} 
