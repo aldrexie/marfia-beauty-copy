@@ -2805,7 +2805,7 @@ details[open] > .header__submenu {
   content: '';
   position: absolute;
   width: 0;
-  height: 2px;
+  height: 1px;
   bottom: 0.8rem;
   left: 1.2rem;
   background-color: rgb(var(--color-foreground));
@@ -2814,6 +2814,7 @@ details[open] > .header__submenu {
 
 .header__menu-item:hover {
   color: rgb(var(--color-foreground));
+  text-decoration: none;
 }
 
 .header__menu-item:hover::after {
@@ -2839,6 +2840,36 @@ details[open] > .header__menu-item::after {
 
 details[open]:hover > .header__menu-item {
   text-decoration: none;
+}
+
+/* Fix dropdown menu hover */
+header-menu details {
+  position: relative;
+}
+
+header-menu details[open] > .header__submenu,
+header-menu details:hover > .header__submenu {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.header__submenu {
+  background-color: rgb(var(--color-background));
+  border-radius: 0;
+  border: 1px solid rgba(var(--color-foreground), 0.1);
+  padding: 1rem;
+  position: absolute;
+  top: 100%;
+  left: -1px;
+  opacity: 0;
+  transform: translateY(-0.5rem);
+  visibility: hidden;
+  pointer-events: none;
+  transition: all var(--duration-default) ease;
+  z-index: 10;
+  min-width: 20rem;
 }
 
 .header__active-menu-item {
