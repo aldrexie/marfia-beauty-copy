@@ -28,7 +28,7 @@
       {%- render 'social-icons' -%}
     {%- endif -%}
     {%- if section.blocks.size > 0 -%}
-      <div
+      <announcement-bar
         class="announcement-bar{% if section.settings.show_social %} announcement-bar--one-announcement{% endif %}"
         role="region"
         aria-label="{{ 'sections.header.announcement' | t }}"
@@ -57,7 +57,7 @@
             {%- endif -%}
           {%- endfor -%}
         </div>
-      </div>
+      </announcement-bar>
 
       <script>
         class AnnouncementBar extends HTMLElement {

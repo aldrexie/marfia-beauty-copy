@@ -1,52 +1,49 @@
 .announcement-bar {
-  overflow: hidden;
+  display: block;
   position: relative;
+  overflow: hidden;
+  min-height: 40px;
+}
+
+.announcement-messages {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.announcement-message {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .announcement-bar__message {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  display: inline-block;
+  padding: 0.5rem;
+  margin: 0;
+  text-align: center;
   white-space: nowrap;
   opacity: 0;
-  width: max-content;
+  transform: translateX(100%);
 }
 
 .announcement-bar__message.active {
-  animation: slideInCenter var(--slide-duration, 5s) forwards;
+  opacity: 1;
+  transform: translateX(0);
+  transition: transform 0.5s ease-out, opacity 0.5s ease-out;
 }
 
 .announcement-bar__message.exit {
-  animation: slideOutLeft var(--slide-duration, 5s) forwards;
+  opacity: 0;
+  transform: translateX(-100%);
+  transition: transform 0.5s ease-in, opacity 0.5s ease-in;
 }
 
-@keyframes slideInCenter {
-  0% {
-    left: 100%;
-    transform: translateX(0);
-    opacity: 0;
-  }
-  20%, 80% {
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 1;
-  }
-  100% {
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 1;
-  }
-}
-
-@keyframes slideOutLeft {
-  0% {
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 1;
-  }
-  100% {
-    left: 0;
-    transform: translateX(-100%);
-    opacity: 0;
-  }
+.announcement-bar__link {
+  display: block;
+  width: 100%;
+  text-align: center;
 } 
