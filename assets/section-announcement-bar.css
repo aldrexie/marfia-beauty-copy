@@ -3,12 +3,16 @@
   position: relative;
   overflow: hidden;
   min-height: 40px;
+  width: 100%;
 }
 
 .announcement-messages {
   position: relative;
   width: 100%;
   height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .announcement-message {
@@ -21,13 +25,16 @@
 }
 
 .announcement-bar__message {
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 0.5rem;
   margin: 0;
   text-align: center;
   white-space: nowrap;
   opacity: 0;
   transform: translateX(100%);
+  width: 100%;
 }
 
 .announcement-bar__message.active {
@@ -43,7 +50,9 @@
 }
 
 .announcement-bar__link {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   text-align: center;
 } 

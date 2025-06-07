@@ -43,15 +43,15 @@
               <div class="announcement-message" {{ block.shopify_attributes }}>
                 {%- if block.settings.link != blank -%}
                   <a href="{{ block.settings.link }}" class="announcement-bar__link link link--text focus-inset animate-arrow">
-                {%- endif -%}
-                <p class="announcement-bar__message h5">
-                  <span>{{ block.settings.text | escape }}</span>
-                  {%- if block.settings.link != blank -%}
-                    {% render 'icon-arrow' %}
-                  {%- endif -%}
-                </p>
-                {%- if block.settings.link != blank -%}
+                    <p class="announcement-bar__message h5">
+                      <span>{{ block.settings.text | escape }}</span>
+                      {% render 'icon-arrow' %}
+                    </p>
                   </a>
+                {%- else -%}
+                  <p class="announcement-bar__message h5">
+                    <span>{{ block.settings.text | escape }}</span>
+                  </p>
                 {%- endif -%}
               </div>
             {%- endif -%}
