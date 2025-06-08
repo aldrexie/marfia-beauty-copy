@@ -248,9 +248,18 @@
     position: relative;
   }
 
-  header-menu:hover details[open] > .header__submenu,
-  header-menu:hover details > .header__submenu,
-  header-menu details[open] > .header__submenu {
+  /* Remove default details behavior */
+  header-menu details > summary::marker,
+  header-menu details > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  header-menu details > summary {
+    list-style: none;
+  }
+
+  /* Show submenu on hover */
+  header-menu:hover details > .header__submenu {
     opacity: 1;
     transform: translateY(0);
     visibility: visible;
@@ -270,24 +279,35 @@
     transform: translateY(-0.5rem);
     visibility: hidden;
     pointer-events: none;
-    transition: all var(--duration-default) ease;
+    transition: opacity 0.2s ease, transform 0.2s ease;
     z-index: 10;
     min-width: 20rem;
     display: none;
   }
 
-  /* Override default details behavior */
-  header-menu details > summary::marker,
-  header-menu details > summary::-webkit-details-marker {
+  /* Style dropdown menu items */
+  .header__submenu .header__menu-item {
+    padding: 0.8rem 2rem;
+    color: rgba(var(--color-foreground), 0.75);
+    transition: color 0.2s ease;
+  }
+
+  /* Remove line animation from dropdown items */
+  .header__submenu .header__menu-item::after {
     display: none;
   }
 
-  header-menu details > summary {
-    list-style: none;
+  .header__submenu .header__menu-item:hover {
+    color: rgb(var(--color-foreground));
+    text-decoration: none;
   }
 
-  header-menu details > summary:focus {
-    outline: none;
+  .header__submenu .header__menu-item span {
+    text-decoration: none;
+  }
+
+  .header__submenu .header__menu-item:hover span {
+    text-decoration: none;
   }
 </style>
 
@@ -813,15 +833,20 @@
         this.addEventListener('mouseenter', this.onMouseEnter.bind(this));
         this.addEventListener('mouseleave', this.onMouseLeave.bind(this));
         this.summary.addEventListener('click', this.onSummaryClick.bind(this));
+
+        // Force details to be open initially to allow hover
+        this.details.setAttribute('open', '');
       }
     }
 
     onMouseEnter() {
-      this.details.setAttribute('open', '');
+      if (this.details) {
+        this.details.setAttribute('open', '');
+      }
     }
 
     onMouseLeave() {
-      if (!this.details.hasAttribute('data-clicked')) {
+      if (this.details && !this.details.hasAttribute('data-clicked')) {
         this.details.removeAttribute('open');
       }
     }
@@ -830,11 +855,9 @@
       event.preventDefault();
       event.stopPropagation();
       
-      if (this.details.hasAttribute('open') && this.details.hasAttribute('data-clicked')) {
-        this.details.removeAttribute('open');
+      if (this.details.hasAttribute('data-clicked')) {
         this.details.removeAttribute('data-clicked');
       } else {
-        this.details.setAttribute('open', '');
         this.details.setAttribute('data-clicked', '');
       }
     }
