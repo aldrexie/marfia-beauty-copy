@@ -258,13 +258,20 @@
     list-style: none;
   }
 
-  /* Show submenu on hover */
-  header-menu:hover details > .header__submenu {
+  /* Show submenu on hover when in hover mode */
+  header[data-dropdown-trigger="hover"] header-menu:hover details > .header__submenu {
     opacity: 1;
     transform: translateY(0);
     visibility: visible;
     pointer-events: auto;
-    display: block;
+  }
+
+  /* Show submenu on click when in click mode */
+  header[data-dropdown-trigger="click"] header-menu details[open] > .header__submenu {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+    pointer-events: auto;
   }
 
   .header__submenu {
@@ -282,7 +289,6 @@
     transition: opacity 0.2s ease, transform 0.2s ease;
     z-index: 10;
     min-width: 20rem;
-    display: none;
   }
 
   /* Style dropdown menu items */
@@ -380,7 +386,7 @@
       assign localization_forms = true
     endif
   -%}
- <header class="header header--{{ section.settings.logo_position }} header--layout-{{ section.settings.menu_layout }} header--mobile-{{ section.settings.mobile_logo_position }} page-width{% if section.settings.menu_type_desktop == 'drawer' %} drawer-menu{% endif %}{% if section.settings.menu != blank %} header--has-menu{% endif %}{% if has_app_block %} header--has-app{% endif %}{% if social_links %} header--has-social{% endif %}{% if shop.customer_accounts_enabled %} header--has-account{% endif %}{% if localization_forms %} header--has-localizations{% endif %}">
+ <header class="header header--{{ section.settings.logo_position }} header--layout-{{ section.settings.menu_layout }} header--mobile-{{ section.settings.mobile_logo_position }} page-width{% if section.settings.menu_type_desktop == 'drawer' %} drawer-menu{% endif %}{% if section.settings.menu != blank %} header--has-menu{% endif %}{% if has_app_block %} header--has-app{% endif %}{% if social_links %} header--has-social{% endif %}{% if shop.customer_accounts_enabled %} header--has-account{% endif %}{% if localization_forms %} header--has-localizations{% endif %}" data-dropdown-trigger="{{ section.settings.dropdown_trigger }}">
 
     {%- liquid
       if section.settings.menu != blank
@@ -828,25 +834,27 @@
       this.details = this.querySelector('details');
       this.summary = this.querySelector('summary');
       this.submenu = this.querySelector('.header__submenu');
+      this.isHoverMode = document.querySelector('header').dataset.dropdownTrigger === 'hover';
 
       if (this.details) {
-        this.addEventListener('mouseenter', this.onMouseEnter.bind(this));
-        this.addEventListener('mouseleave', this.onMouseLeave.bind(this));
-        this.summary.addEventListener('click', this.onSummaryClick.bind(this));
-
-        // Force details to be open initially to allow hover
-        this.details.setAttribute('open', '');
+        if (this.isHoverMode) {
+          this.addEventListener('mouseenter', this.onMouseEnter.bind(this));
+          this.addEventListener('mouseleave', this.onMouseLeave.bind(this));
+          this.summary.addEventListener('click', (e) => e.preventDefault());
+        } else {
+          this.summary.addEventListener('click', this.onSummaryClick.bind(this));
+        }
       }
     }
 
     onMouseEnter() {
-      if (this.details) {
+      if (this.details && this.isHoverMode) {
         this.details.setAttribute('open', '');
       }
     }
 
     onMouseLeave() {
-      if (this.details && !this.details.hasAttribute('data-clicked')) {
+      if (this.details && this.isHoverMode) {
         this.details.removeAttribute('open');
       }
     }
@@ -855,10 +863,16 @@
       event.preventDefault();
       event.stopPropagation();
       
-      if (this.details.hasAttribute('data-clicked')) {
-        this.details.removeAttribute('data-clicked');
+      if (this.details.hasAttribute('open')) {
+        this.details.removeAttribute('open');
       } else {
-        this.details.setAttribute('data-clicked', '');
+        // Close other open menus
+        document.querySelectorAll('header-menu details[open]').forEach(detail => {
+          if (detail !== this.details) {
+            detail.removeAttribute('open');
+          }
+        });
+        this.details.setAttribute('open', '');
       }
     }
   }
@@ -942,6 +956,23 @@
       "id": "menu",
       "default": "main-menu",
       "label": "t:sections.header.settings.menu.label"
+    },
+    {
+      "type": "select",
+      "id": "dropdown_trigger",
+      "options": [
+        {
+          "value": "hover",
+          "label": "Show on Hover"
+        },
+        {
+          "value": "click",
+          "label": "Show on Click"
+        }
+      ],
+      "default": "hover",
+      "label": "Dropdown Menu Trigger",
+      "info": "Choose how the dropdown menu appears"
     },
     {
       "type": "select",
