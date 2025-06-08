@@ -240,16 +240,22 @@
   }
 
   /* Fix dropdown menu hover */
+  header-menu {
+    position: relative;
+  }
+
   header-menu details {
     position: relative;
   }
 
-  header-menu details[open] > .header__submenu,
-  header-menu details:hover > .header__submenu {
+  header-menu:hover details[open] > .header__submenu,
+  header-menu:hover details > .header__submenu,
+  header-menu details[open] > .header__submenu {
     opacity: 1;
     transform: translateY(0);
     visibility: visible;
     pointer-events: auto;
+    display: block;
   }
 
   .header__submenu {
@@ -267,6 +273,21 @@
     transition: all var(--duration-default) ease;
     z-index: 10;
     min-width: 20rem;
+    display: none;
+  }
+
+  /* Override default details behavior */
+  header-menu details > summary::marker,
+  header-menu details > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  header-menu details > summary {
+    list-style: none;
+  }
+
+  header-menu details > summary:focus {
+    outline: none;
   }
 </style>
 
@@ -789,13 +810,13 @@
       this.submenu = this.querySelector('.header__submenu');
 
       if (this.details) {
-        this.details.addEventListener('mouseover', this.onMouseOver.bind(this));
-        this.details.addEventListener('mouseleave', this.onMouseLeave.bind(this));
+        this.addEventListener('mouseenter', this.onMouseEnter.bind(this));
+        this.addEventListener('mouseleave', this.onMouseLeave.bind(this));
         this.summary.addEventListener('click', this.onSummaryClick.bind(this));
       }
     }
 
-    onMouseOver() {
+    onMouseEnter() {
       this.details.setAttribute('open', '');
     }
 
@@ -807,7 +828,9 @@
 
     onSummaryClick(event) {
       event.preventDefault();
-      if (this.details.hasAttribute('open')) {
+      event.stopPropagation();
+      
+      if (this.details.hasAttribute('open') && this.details.hasAttribute('data-clicked')) {
         this.details.removeAttribute('open');
         this.details.removeAttribute('data-clicked');
       } else {
