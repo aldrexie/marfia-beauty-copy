@@ -118,19 +118,23 @@
       margin: 0;
     }
 
-    /* Hide desktop search on mobile */
-    .header--layout-centered-logo .header__inline-menu--left .header__search {
-      display: none;
-    }
-
-    /* Show search in mobile icons wrapper */
-    .header--layout-centered-logo .header__icons-wrapper .header__search {
-      display: block;
-      margin: 0;
+    /* Show left search on desktop, hide on mobile */
+    @media screen and (max-width: 989px) {
+      .header--layout-centered-logo .header__inline-menu--left .header__search {
+        display: none;
+      }
+      
+      .header--layout-centered-logo .header__icons-wrapper .header__search {
+        display: block;
+        margin: 0;
+      }
     }
 
     @media screen and (min-width: 990px) {
-      /* Hide mobile search on desktop */
+      .header--layout-centered-logo .header__inline-menu--left .header__search {
+        display: block;
+      }
+      
       .header--layout-centered-logo .header__icons-wrapper .header__search {
         display: none;
       }
@@ -605,6 +609,9 @@
       
       {% if section.settings.menu_layout == 'centered-logo' %}
         <nav class="header__inline-menu header__inline-menu--left">
+          <div class="header__search">
+            {% render 'header-search', input_id: 'Search-In-Modal' %}
+          </div>
           <ul class="list-menu list-menu--inline" role="list">
             {%- for link in menu_items limit: middle_point -%}
               <li>
