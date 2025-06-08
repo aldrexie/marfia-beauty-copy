@@ -321,6 +321,45 @@
   .header__submenu .header__menu-item:hover span {
     text-decoration: none;
   }
+
+  .header.header--middle-center.header--layout-centered-logo {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: 0;
+    margin-right: 0;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  /* Override page-width class for this specific header */
+  .header.header--middle-center.header--layout-centered-logo.page-width {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: 0;
+    margin-right: 0;
+    max-width: 100%;
+  }
+
+  @media screen and (max-width: 989px) {
+    .header.header--middle-center.header--layout-centered-logo.header--mobile-center {
+      padding-left: 0;
+      padding-right: 0;
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+
+  /* Ensure inner elements maintain their spacing */
+  .header--layout-centered-logo .header__inline-menu--left,
+  .header--layout-centered-logo .header__inline-menu--right {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  .header--layout-centered-logo .header__heading {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
 </style>
 
 {%- style -%}
