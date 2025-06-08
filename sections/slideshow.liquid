@@ -25,6 +25,43 @@
   {%- endstyle -%}
 {%- endif -%}
 
+{%- style -%}
+  .banner__video-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .banner__video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+  }
+
+  @media screen and (max-width: 749px) {
+    .banner__video {
+      height: 100%;
+    }
+  }
+
+  {%- for block in section.blocks -%}
+    #Slide-{{ section.id }}-{{ forloop.index }} .banner__media::after {
+      opacity: {{ block.settings.image_overlay_opacity | divided_by: 100.0 }};
+    }
+  {%- endfor -%}
+{%- endstyle -%}
+
 <slideshow-component
   class="slider-mobile-gutter{% if section.settings.layout == 'grid' %} page-width{% endif %}{% if section.settings.show_text_below %} mobile-text-below{% endif %}"
   role="region"
@@ -113,11 +150,6 @@
     data-speed="{{ section.settings.change_slides_speed }}"
   >
     {%- for block in section.blocks -%}
-      <style>
-        #Slide-{{ section.id }}-{{ forloop.index }} .banner__media::after {
-          opacity: {{ block.settings.image_overlay_opacity | divided_by: 100.0 }};
-        }
-      </style>
       <div
         class="slideshow__slide grid__item grid--1-col slider__slide"
         id="Slide-{{ section.id }}-{{ forloop.index }}"
@@ -127,8 +159,21 @@
         aria-label="{{ forloop.index }} {{ 'general.slider.of' | t }} {{ forloop.length }}"
         tabindex="-1"
       >
-        <div class="slideshow__media banner__media media{% if block.settings.image == blank %} placeholder{% endif %}{% if section.settings.image_behavior != 'none' %} animate--{{ section.settings.image_behavior }}{% endif %}">
-          {%- if block.settings.image -%}
+        <div class="slideshow__media banner__media media{% if block.settings.image == blank and block.settings.video_url == blank %} placeholder{% endif %}{% if section.settings.image_behavior != 'none' %} animate--{{ section.settings.image_behavior }}{% endif %}">
+          {%- if block.settings.video_url != blank -%}
+            <div class="banner__video-wrapper">
+              <video 
+                class="banner__video" 
+                autoplay 
+                loop 
+                muted 
+                playsinline
+                poster="{%- if block.settings.image != blank -%}{{ block.settings.image | image_url: width: 3840 }}{%- endif -%}"
+              >
+                <source src="{{ block.settings.video_url }}" type="video/mp4">
+              </video>
+            </div>
+          {%- elsif block.settings.image -%}
             {%- liquid
               assign height = block.settings.image.width | divided_by: block.settings.image.aspect_ratio | round
               if section.settings.image_behavior == 'ambient'
@@ -412,6 +457,12 @@
           "type": "image_picker",
           "id": "image",
           "label": "t:sections.slideshow.blocks.slide.settings.image.label"
+        },
+        {
+          "type": "url",
+          "id": "video_url",
+          "label": "Video URL (MP4)",
+          "info": "Upload your video to the Files section and paste its URL here. Video will be used as background if provided."
         },
         {
           "type": "inline_richtext",
