@@ -323,42 +323,42 @@
   }
 
   .header.header--middle-center.header--layout-centered-logo {
-    padding-left: 0;
-    padding-right: 0;
-    margin-left: 0;
-    margin-right: 0;
-    max-width: 100%;
-    width: 100%;
+    padding-left: 40px;
+    padding-right: 40px;
+    margin-left: 10px;
+    margin-right: 10px;
+    max-width: calc(100% - 20px);
+    width: calc(100% - 20px);
   }
 
   /* Override page-width class for this specific header */
   .header.header--middle-center.header--layout-centered-logo.page-width {
-    padding-left: 0;
-    padding-right: 0;
-    margin-left: 0;
-    margin-right: 0;
-    max-width: 100%;
+    padding-left: 40px;
+    padding-right: 40px;
+    margin-left: 10px;
+    margin-right: 10px;
+    max-width: calc(100% - 20px);
   }
 
   @media screen and (max-width: 989px) {
     .header.header--middle-center.header--layout-centered-logo.header--mobile-center {
-      padding-left: 0;
-      padding-right: 0;
-      margin-left: 0;
-      margin-right: 0;
+      padding-left: 40px;
+      padding-right: 40px;
+      margin-left: 10px;
+      margin-right: 10px;
     }
   }
 
-  /* Ensure inner elements maintain their spacing */
+  /* Remove the extra padding from inner elements since we have it on the container */
   .header--layout-centered-logo .header__inline-menu--left,
   .header--layout-centered-logo .header__inline-menu--right {
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding-left: 0;
+    padding-right: 0;
   }
 
   .header--layout-centered-logo .header__heading {
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding-left: 0;
+    padding-right: 0;
   }
 </style>
 
