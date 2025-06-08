@@ -572,9 +572,6 @@
         </div>
 
         <nav class="header__inline-menu header__inline-menu--left">
-          <div class="header__search">
-            {% render 'header-search', input_id: 'Search-In-Modal' %}
-          </div>
           <ul class="list-menu list-menu--inline" role="list">
             {%- for link in menu_items limit: middle_point -%}
               <li>
