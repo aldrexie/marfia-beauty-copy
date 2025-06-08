@@ -111,6 +111,37 @@
     
     .header--layout-centered-logo .header__icons-wrapper {
       margin-left: 0;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .header--layout-centered-logo .header__search {
+      display: none;
+    }
+
+    /* Move search to header icons wrapper on mobile */
+    .header--layout-centered-logo .header__icons-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      order: 2;
+    }
+
+    .header--layout-centered-logo .header__icons-wrapper .header__icon--search {
+      display: flex;
+    }
+
+    /* Add search icon to mobile header icons */
+    .header--layout-centered-logo .header__icons-wrapper::before {
+      content: '';
+      display: flex;
+      align-items: center;
+    }
+
+    .header--layout-centered-logo .header__icons-wrapper .header__search {
+      display: block;
+      margin: 0;
     }
   }
 
@@ -649,6 +680,11 @@
                 </span>
               </a>
             {%- endif -%}
+
+            <!-- Add search icon for mobile view -->
+            <div class="header__search">
+              {% render 'header-search', input_id: 'Search-In-Modal-Mobile' %}
+            </div>
 
 <!-- display the cart icon always on the right side of user icon -->
             <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="cart-icon-bubble">
