@@ -80,7 +80,7 @@
         "logo_position": "middle-center",
         "menu": "main-menu",
         "dropdown_trigger": "hover",
-        "menu_type_desktop": "drawer",
+        "menu_type_desktop": "mega",
         "menu_layout": "centered-logo",
         "sticky_header_type": "none",
         "show_line_separator": false,
