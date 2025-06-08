@@ -82,18 +82,21 @@
       justify-content: space-between;
       align-items: center;
       padding: 1rem;
-      gap: 1rem;
+      gap: 0.5rem;
     }
     
     .header--layout-centered-logo header-drawer {
       order: 1;
       margin-left: 0;
+      display: flex;
+      align-items: center;
     }
 
     .header--layout-centered-logo .header__heading {
       order: 2;
       margin: 0;
-      flex: 1;
+      flex: 0 1 auto;
+      min-width: 100px;
       text-align: center;
     }
 
@@ -102,12 +105,11 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      margin-left: auto;
     }
     
     .header--layout-centered-logo .header__inline-menu--left,
-    .header--layout-centered-logo .header__inline-menu--right ul,
-    .header--layout-centered-logo .header__icon--account,
-    .header--layout-centered-logo .desktop-localization-wrapper {
+    .header--layout-centered-logo .header__inline-menu--right ul {
       display: none;
     }
     
@@ -116,19 +118,6 @@
       align-items: center;
       gap: 0.5rem;
       margin: 0;
-    }
-
-    /* Handle search icon visibility */
-    @media screen and (max-width: 989px) {
-      .header--layout-centered-logo .header__inline-menu--left .header__search {
-        display: none;
-      }
-    }
-
-    @media screen and (min-width: 990px) {
-      .header--layout-centered-logo .header__inline-menu--left .header__search {
-        display: block;
-      }
     }
 
     /* Ensure icons are properly sized and aligned */
@@ -141,8 +130,20 @@
 
     /* Adjust logo size if needed */
     .header--layout-centered-logo .header__heading-logo {
-      max-height: 40px;
+      max-height: 35px;
       width: auto;
+    }
+
+    /* Hide desktop elements on mobile */
+    .header--layout-centered-logo .header__icon--account,
+    .header--layout-centered-logo .desktop-localization-wrapper,
+    .header--layout-centered-logo .header__search {
+      display: none;
+    }
+
+    /* Show only essential icons */
+    .header--layout-centered-logo .header__icon--cart {
+      display: flex;
     }
   }
 
