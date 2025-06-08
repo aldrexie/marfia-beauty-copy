@@ -118,40 +118,16 @@
       margin: 0;
     }
 
-    /* Handle search icon and account visibility */
-    .desktop-only {
-      display: none;
-    }
-    
-    .mobile-only {
-      display: none;
-    }
-
+    /* Handle search icon visibility */
     @media screen and (max-width: 989px) {
       .header--layout-centered-logo .header__inline-menu--left .header__search {
         display: none;
-      }
-      
-      .desktop-only {
-        display: none;
-      }
-      
-      .mobile-only {
-        display: flex;
       }
     }
 
     @media screen and (min-width: 990px) {
       .header--layout-centered-logo .header__inline-menu--left .header__search {
         display: block;
-      }
-      
-      .desktop-only {
-        display: flex;
-      }
-      
-      .mobile-only {
-        display: none;
       }
     }
 
@@ -692,8 +668,7 @@
 <!-- display the user icon always on the left side of cart icon -->
           <div class="header__icons-wrapper">
             {%- if shop.customer_accounts_enabled -%}
-              <!-- Account icon for desktop -->
-              <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="header__icon header__icon--account link focus-inset desktop-only">
+              <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="header__icon header__icon--account link focus-inset">
                 {% render 'icon-account' %}
                 <span class="visually-hidden">
                   {%- liquid
@@ -705,10 +680,6 @@
                   -%}
                 </span>
               </a>
-              <!-- Search icon for mobile -->
-              <div class="header__icon header__search mobile-only">
-                {% render 'header-search', input_id: 'Search-In-Modal-Mobile' %}
-              </div>
             {%- endif -%}
 
 <!-- display the cart icon always on the right side of user icon -->
