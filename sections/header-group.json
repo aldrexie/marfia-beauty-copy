@@ -79,7 +79,8 @@
       "settings": {
         "logo_position": "middle-center",
         "menu": "main-menu",
-        "menu_type_desktop": "dropdown",
+        "dropdown_trigger": "hover",
+        "menu_type_desktop": "drawer",
         "menu_layout": "centered-logo",
         "sticky_header_type": "none",
         "show_line_separator": false,
