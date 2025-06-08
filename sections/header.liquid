@@ -209,6 +209,65 @@
       padding-top: 0.5rem;
     }
   }
+
+  .header__menu-item::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0.5px;  /* Changed from 1px to 0.5px to make it thinner */
+    bottom: 0.8rem;
+    left: 1.2rem;
+    background-color: rgb(var(--color-foreground));
+    transition: width 0.3s ease-in-out;
+  }
+
+  .header__menu-item:hover {
+    color: rgb(var(--color-foreground));
+    text-decoration: none;
+  }
+
+  .header__menu-item:hover::after {
+    width: calc(100% - 2.4rem);
+  }
+
+  .header__menu-item span {
+    transition: text-decoration var(--duration-short) ease;
+  }
+
+  .header__menu-item:hover span {
+    text-decoration: none;  /* Changed from underline to none to prevent double line */
+    text-underline-offset: 0.3rem;
+  }
+
+  /* Fix dropdown menu hover */
+  header-menu details {
+    position: relative;
+  }
+
+  header-menu details[open] > .header__submenu,
+  header-menu details:hover > .header__submenu {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .header__submenu {
+    background-color: rgb(var(--color-background));
+    border-radius: 0;
+    border: 1px solid rgba(var(--color-foreground), 0.1);
+    padding: 1rem;
+    position: absolute;
+    top: 100%;
+    left: -1px;
+    opacity: 0;
+    transform: translateY(-0.5rem);
+    visibility: hidden;
+    pointer-events: none;
+    transition: all var(--duration-default) ease;
+    z-index: 10;
+    min-width: 20rem;
+  }
 </style>
 
 {%- style -%}
@@ -397,6 +456,7 @@
             {%- endfor -%}
           </ul>
 
+<!-- display the user icon always on the left side of cart icon -->
           <div class="header__icons-wrapper">
             {%- if shop.customer_accounts_enabled -%}
               <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="header__icon header__icon--account link focus-inset">
@@ -413,6 +473,7 @@
               </a>
             {%- endif -%}
 
+<!-- display the cart icon always on the right side of user icon -->
             <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="cart-icon-bubble">
               {%- liquid
                 if cart == empty
@@ -719,6 +780,44 @@
   }
 
   customElements.define('sticky-header', StickyHeader);
+
+  class HeaderMenu extends HTMLElement {
+    constructor() {
+      super();
+      this.details = this.querySelector('details');
+      this.summary = this.querySelector('summary');
+      this.submenu = this.querySelector('.header__submenu');
+
+      if (this.details) {
+        this.details.addEventListener('mouseover', this.onMouseOver.bind(this));
+        this.details.addEventListener('mouseleave', this.onMouseLeave.bind(this));
+        this.summary.addEventListener('click', this.onSummaryClick.bind(this));
+      }
+    }
+
+    onMouseOver() {
+      this.details.setAttribute('open', '');
+    }
+
+    onMouseLeave() {
+      if (!this.details.hasAttribute('data-clicked')) {
+        this.details.removeAttribute('open');
+      }
+    }
+
+    onSummaryClick(event) {
+      event.preventDefault();
+      if (this.details.hasAttribute('open')) {
+        this.details.removeAttribute('open');
+        this.details.removeAttribute('data-clicked');
+      } else {
+        this.details.setAttribute('open', '');
+        this.details.setAttribute('data-clicked', '');
+      }
+    }
+  }
+
+  customElements.define('header-menu', HeaderMenu);
 {% endjavascript %}
 
 <script type="application/ld+json">
