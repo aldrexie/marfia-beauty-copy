@@ -256,41 +256,41 @@
 
   header-menu details > summary {
     list-style: none;
+    cursor: pointer;
   }
 
   /* Simple hover behavior */
   header[data-dropdown-trigger="hover"] header-menu:hover .header__submenu {
-    display: block;
     opacity: 1;
     transform: translateY(0);
     visibility: visible;
     pointer-events: auto;
+    display: block;
   }
 
   /* Click behavior */
   header[data-dropdown-trigger="click"] header-menu details[open] .header__submenu {
-    display: block;
     opacity: 1;
     transform: translateY(0);
     visibility: visible;
     pointer-events: auto;
+    display: block;
   }
 
   .header__submenu {
-    background-color: rgb(var(--color-background));
-    border-radius: 0;
-    border: 1px solid rgba(var(--color-foreground), 0.1);
-    padding: 1rem;
     position: absolute;
     top: 100%;
     left: -1px;
+    background-color: rgb(var(--color-background));
+    border: 1px solid rgba(var(--color-foreground), 0.1);
+    padding: 1rem;
+    min-width: 20rem;
     opacity: 0;
-    transform: translateY(-0.5rem);
     visibility: hidden;
     pointer-events: none;
-    transition: all 0.2s ease;
-    z-index: 10;
-    min-width: 20rem;
+    transform: translateY(-0.5rem);
+    transition: all 0.2s ease-in-out;
+    z-index: 100;
     display: none;
   }
 
@@ -299,6 +299,9 @@
     padding: 0.8rem 2rem;
     color: rgba(var(--color-foreground), 0.75);
     transition: color 0.2s ease;
+    white-space: nowrap;
+    display: block;
+    width: 100%;
   }
 
   /* Remove line animation from dropdown items */
@@ -841,9 +844,26 @@
 
       if (this.details) {
         if (this.isHoverMode) {
-          // For hover mode, just prevent click and keep details open
+          // For hover mode
           this.details.setAttribute('open', '');
           this.summary.addEventListener('click', (e) => e.preventDefault());
+          
+          // Add hover listeners
+          this.addEventListener('mouseenter', () => {
+            this.submenu.style.opacity = '1';
+            this.submenu.style.visibility = 'visible';
+            this.submenu.style.transform = 'translateY(0)';
+            this.submenu.style.pointerEvents = 'auto';
+            this.submenu.style.display = 'block';
+          });
+
+          this.addEventListener('mouseleave', () => {
+            this.submenu.style.opacity = '0';
+            this.submenu.style.visibility = 'hidden';
+            this.submenu.style.transform = 'translateY(-0.5rem)';
+            this.submenu.style.pointerEvents = 'none';
+            this.submenu.style.display = 'none';
+          });
         } else {
           // For click mode
           this.summary.addEventListener('click', this.onSummaryClick.bind(this));
@@ -857,7 +877,7 @@
       event.stopPropagation();
       
       if (this.details.hasAttribute('open')) {
-        this.details.removeAttribute('open');
+        this.closeSubmenu();
       } else {
         // Close other open menus
         document.querySelectorAll('header-menu details[open]').forEach(detail => {
@@ -865,13 +885,31 @@
             detail.removeAttribute('open');
           }
         });
-        this.details.setAttribute('open', '');
+        this.openSubmenu();
       }
+    }
+
+    openSubmenu() {
+      this.details.setAttribute('open', '');
+      this.submenu.style.opacity = '1';
+      this.submenu.style.visibility = 'visible';
+      this.submenu.style.transform = 'translateY(0)';
+      this.submenu.style.pointerEvents = 'auto';
+      this.submenu.style.display = 'block';
+    }
+
+    closeSubmenu() {
+      this.details.removeAttribute('open');
+      this.submenu.style.opacity = '0';
+      this.submenu.style.visibility = 'hidden';
+      this.submenu.style.transform = 'translateY(-0.5rem)';
+      this.submenu.style.pointerEvents = 'none';
+      this.submenu.style.display = 'none';
     }
 
     onDocumentClick(event) {
       if (!this.isHoverMode && !this.contains(event.target)) {
-        this.details.removeAttribute('open');
+        this.closeSubmenu();
       }
     }
 
