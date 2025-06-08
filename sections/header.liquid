@@ -258,23 +258,22 @@
     list-style: none;
   }
 
-  /* Show submenu on hover when in hover mode */
-  header[data-dropdown-trigger="hover"] header-menu:hover details > .header__submenu,
-  header[data-dropdown-trigger="hover"] .header__submenu:hover {
+  /* Simple hover behavior */
+  header[data-dropdown-trigger="hover"] header-menu:hover .header__submenu {
+    display: block;
     opacity: 1;
     transform: translateY(0);
     visibility: visible;
     pointer-events: auto;
-    display: block;
   }
 
-  /* Show submenu on click when in click mode */
-  header[data-dropdown-trigger="click"] header-menu details[open] > .header__submenu {
+  /* Click behavior */
+  header[data-dropdown-trigger="click"] header-menu details[open] .header__submenu {
+    display: block;
     opacity: 1;
     transform: translateY(0);
     visibility: visible;
     pointer-events: auto;
-    display: block;
   }
 
   .header__submenu {
@@ -289,7 +288,7 @@
     transform: translateY(-0.5rem);
     visibility: hidden;
     pointer-events: none;
-    transition: opacity 0.2s ease, transform 0.2s ease;
+    transition: all 0.2s ease;
     z-index: 10;
     min-width: 20rem;
     display: none;
@@ -842,49 +841,14 @@
 
       if (this.details) {
         if (this.isHoverMode) {
-          this.addEventListener('mouseenter', this.onMouseEnter.bind(this));
-          this.addEventListener('mouseleave', this.onMouseLeave.bind(this));
-          this.submenu.addEventListener('mouseenter', this.onSubmenuEnter.bind(this));
-          this.submenu.addEventListener('mouseleave', this.onSubmenuLeave.bind(this));
+          // For hover mode, just prevent click and keep details open
+          this.details.setAttribute('open', '');
           this.summary.addEventListener('click', (e) => e.preventDefault());
         } else {
+          // For click mode
           this.summary.addEventListener('click', this.onSummaryClick.bind(this));
           document.addEventListener('click', this.onDocumentClick.bind(this));
         }
-      }
-    }
-
-    onMouseEnter() {
-      if (this.details && this.isHoverMode) {
-        this.details.setAttribute('open', '');
-        this.submenu.style.display = 'block';
-      }
-    }
-
-    onMouseLeave() {
-      if (this.details && this.isHoverMode) {
-        // Add a small delay to allow moving to submenu
-        this.leaveTimeout = setTimeout(() => {
-          if (!this.isSubmenuHovered) {
-            this.details.removeAttribute('open');
-            this.submenu.style.display = 'none';
-          }
-        }, 50);
-      }
-    }
-
-    onSubmenuEnter() {
-      if (this.isHoverMode) {
-        this.isSubmenuHovered = true;
-        clearTimeout(this.leaveTimeout);
-      }
-    }
-
-    onSubmenuLeave() {
-      if (this.isHoverMode) {
-        this.isSubmenuHovered = false;
-        this.details.removeAttribute('open');
-        this.submenu.style.display = 'none';
       }
     }
 
@@ -894,34 +858,25 @@
       
       if (this.details.hasAttribute('open')) {
         this.details.removeAttribute('open');
-        this.submenu.style.display = 'none';
       } else {
         // Close other open menus
         document.querySelectorAll('header-menu details[open]').forEach(detail => {
           if (detail !== this.details) {
             detail.removeAttribute('open');
-            detail.querySelector('.header__submenu').style.display = 'none';
           }
         });
         this.details.setAttribute('open', '');
-        this.submenu.style.display = 'block';
       }
     }
 
     onDocumentClick(event) {
       if (!this.isHoverMode && !this.contains(event.target)) {
         this.details.removeAttribute('open');
-        this.submenu.style.display = 'none';
       }
     }
 
     disconnectedCallback() {
-      if (this.isHoverMode) {
-        this.removeEventListener('mouseenter', this.onMouseEnter);
-        this.removeEventListener('mouseleave', this.onMouseLeave);
-        this.submenu.removeEventListener('mouseenter', this.onSubmenuEnter);
-        this.submenu.removeEventListener('mouseleave', this.onSubmenuLeave);
-      } else {
+      if (!this.isHoverMode) {
         document.removeEventListener('click', this.onDocumentClick);
       }
     }
