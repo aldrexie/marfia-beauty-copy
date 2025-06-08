@@ -118,13 +118,17 @@
       margin: 0;
     }
 
-    /* Show left search on desktop, hide on mobile */
+    /* Handle search icon visibility for desktop/mobile */
+    .header__search--mobile {
+      display: none;
+    }
+
     @media screen and (max-width: 989px) {
       .header--layout-centered-logo .header__inline-menu--left .header__search {
         display: none;
       }
       
-      .header--layout-centered-logo .header__icons-wrapper .header__search {
+      .header__search--mobile {
         display: block;
         margin: 0;
       }
@@ -135,7 +139,7 @@
         display: block;
       }
       
-      .header--layout-centered-logo .header__icons-wrapper .header__search {
+      .header__search--mobile {
         display: none;
       }
     }
@@ -692,7 +696,7 @@
             {%- endif -%}
 
             <!-- Add search icon for mobile view -->
-            <div class="header__search">
+            <div class="header__search header__search--mobile">
               {% render 'header-search', input_id: 'Search-In-Modal-Mobile' %}
             </div>
 
